@@ -5,6 +5,26 @@ from langgraph.graph.state import CompiledStateGraph
 from typing_extensions import TypedDict
 
 
+
+# 3. 构建Graph工作流图
+def build_graph() -> CompiledStateGraph:
+    """构建"把大象装冰箱"的工作流程图"""
+    # 创建图对象StateGraph
+    graph = StateGraph(ElephantInFridgeState)
+    # 添加节点Node
+    graph.add_node("open_fridge", open_fridge)
+    graph.add_node("put_elephant", put_elephant)
+    graph.add_node("close_fridge", close_fridge)
+    # 添加起始边
+    graph.add_edge(START, "open_fridge")
+    # 添加边Edge,将节点连接起来,形成工作流
+    graph.add_edge("open_fridge", "put_elephant")
+    graph.add_edge("put_elephant", "close_fridge")
+    # 添加结束边
+    graph.add_edge("close_fridge", END)
+    # 返回编译好的图Graph
+    return graph.compile()
+
 # 4. 运行Graph工作流
 def run_workflow():
     """运行"把大象装冰箱"的工作流"""
@@ -24,4 +44,5 @@ def run_workflow():
 
 # 执行入口
 if __name__ == "__main__":
+
     final_state = run_workflow()
