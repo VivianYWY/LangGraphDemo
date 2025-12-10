@@ -4,7 +4,42 @@ from langgraph.graph import StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from typing_extensions import TypedDict
 
-
+# 2. 定义每个步骤的处理节点  
+def open_fridge(state: ElephantInFridgeState) -> ElephantInFridgeState:  
+    """第一步: 把冰箱门打开"""  
+    print("正在打开冰箱门...")  
+    # 执行当前节点业务逻辑  
+    print("冰箱门已打开！")  
+    # 更新状态  
+    state["fridge_open"] = True  
+    # 当前节点处理完成,更新状态  
+    return state  
+  
+def put_elephant(state: ElephantInFridgeState) -> ElephantInFridgeState:  
+    """第二步: 把大象放进去"""  
+    # 获取当前状态  
+    if not state["fridge_open"]:  
+        raise ValueError("冰箱门未打开，无法放入大象！")  
+    # 执行当前节点业务逻辑  
+    print("正在把大象放入冰箱...")  
+    print("大象已放入冰箱！")  
+    # 更新状态  
+    state["elephant_inside"] = True  
+    # 当前节点处理完成,更新状态  
+    return state  
+  
+def close_fridge(state: ElephantInFridgeState) -> ElephantInFridgeState:  
+    """第三步: 把冰箱门带上"""  
+    # 获取当前状态  
+    if not state["elephant_inside"]:  
+        print("警告：冰箱内没有大象，是否确认关闭？")  
+    # 执行当前节点业务逻辑  
+    print("正在关闭冰箱门...")  
+    print("冰箱门已关闭！")  
+    # 更新状态  
+    state["fridge_open"] = False  
+    # 当前节点处理完成,更新状态  
+    return state  
 
 # 3. 构建Graph工作流图
 def build_graph() -> CompiledStateGraph:
@@ -46,3 +81,4 @@ def run_workflow():
 if __name__ == "__main__":
 
     final_state = run_workflow()
+
