@@ -4,6 +4,17 @@ from langgraph.graph import StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from typing_extensions import TypedDict
 
+
+# 1. 定义状态  
+class ElephantInFridgeState(TypedDict):  
+    """  
+    定义状态——大象在冰箱中  
+    状态内的参数可以在多个节点间保存和流转  
+    """  
+    fridge_open: bool  # 冰箱门是否打开  
+    elephant_inside: bool  # 大象是否在冰箱内  
+
+
 # 2. 定义每个步骤的处理节点  
 def open_fridge(state: ElephantInFridgeState) -> ElephantInFridgeState:  
     """第一步: 把冰箱门打开"""  
@@ -81,4 +92,5 @@ def run_workflow():
 if __name__ == "__main__":
 
     final_state = run_workflow()
+
 
