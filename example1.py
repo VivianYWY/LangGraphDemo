@@ -1,3 +1,26 @@
+
+
+def route_audit(state: RiskControlState):
+    """根据审核结果决定下一步流程"""
+    return "human_audit" if state["need_human_audit"] else END
+
+# 添加人工审核节点
+workflow.add_node("human_audit", human_audit_agent)
+
+# 定义条件分支
+workflow.add_conditional_edges(
+    "audit",  # 源节点
+    route_audit,  # 路由判断函数
+    {
+        "human_audit": "human_audit",  # 高风险路径
+        END: END  # 低风险路径
+    }
+)
+
+# 人工审核后流程闭环
+workflow.add_edge("human_audit", END)
+
+
 # 配置内存持久化（生产环境可改用Redis等分布式存储）
 from langgraph.checkpoint.memory import InMemorySaver
 checkpointer = InMemorySaver()
