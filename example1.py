@@ -1,4 +1,19 @@
+from langgraph.graph import StateGraph, START, END
 
+# 初始化状态图
+workflow = StateGraph(RiskControlState)
+
+# 添加节点
+workflow.add_node("planner", planner_agent)
+workflow.add_node("data_collector", data_collector_agent)
+workflow.add_node("analyzer", analyzer_agent)
+workflow.add_node("audit", audit_agent)
+
+# 定义线性流转路径
+workflow.add_edge(START, "planner")
+workflow.add_edge("planner", "data_collector")
+workflow.add_edge("data_collector", "analyzer")
+workflow.add_edge("analyzer", "audit")
 
 def route_audit(state: RiskControlState):
     """根据审核结果决定下一步流程"""
