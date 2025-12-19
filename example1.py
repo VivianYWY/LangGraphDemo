@@ -1,5 +1,23 @@
 from langgraph.graph import StateGraph, START, END
 
+
+def audit_agent(state: RiskControlState):
+    """评估分析报告的风险等级，决定是否需要人工审核"""
+    report = state['analysis_report']
+    risk_score = calculate_risk_score(report)  # 自定义风险评分函数
+    if risk_score > 80:  # 高风险需人工审核
+        return {
+            "need_human_audit": True,
+            "current_agent": "audit",
+            "messages": [f"审核智能体标记高风险，触发人工审核流程"]
+        }
+    return {
+        "need_human_audit": False,
+        "current_agent": "audit",
+        "messages": [f"审核智能体确认低风险，可直接输出结果"]
+    }
+
+
 # 初始化状态图
 workflow = StateGraph(RiskControlState)
 
