@@ -13,7 +13,14 @@ load\_dotenv()
 from langchain.chat\_models import init\_chat\_model  
 llm = init\_chat\_model("deepseek-chat", model\_provider="deepseek")
 
-
+def Chat\_Bot(state:SubAgentState) -> SubAgentState:  
+    """这个节点将使用大语言模型对用户的输入进行反馈"""  
+    system\_prompt = SystemMessage(content="你是一个助手，请根据用户输入选择合适的工具（如有）来回复。")  
+    messages = [system\_prompt] + state["messages"]  
+    response = Agent.invoke(messages)  
+    if response.content:  
+        print(f"\nAI:{response.content}\n")  
+    return {"messages":[response]}
 
 from langchain\_core.tools import tool  
 from datetime import datetime  
