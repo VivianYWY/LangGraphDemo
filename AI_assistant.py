@@ -16,3 +16,10 @@ class AssistantState(TypedDict):
     tool_needed: bool  # 是否需要调用工具
     tool_result: str  # 工具调用的结果
     final_answer: str  # 最终回答
+
+# 2. 初始化 LLM（使用 OpenAI 的 GPT-3.5/4）
+llm = ChatOpenAI(
+    model="gpt-3.5-turbo",
+    temperature=0,
+    api_key=os.getenv("OPENAI_API_KEY")
+)
