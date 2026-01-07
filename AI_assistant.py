@@ -23,3 +23,17 @@ llm = ChatOpenAI(
     temperature=0,
     api_key=os.getenv("OPENAI_API_KEY")
 )
+
+# 3. 定义工作流节点函数
+def check_tool_need(state: AssistantState) -> AssistantState:
+    """
+    节点1：判断是否需要调用工具
+    """
+    query = state["user_query"]
+    # 简单判断：包含"天气"关键词则需要调用工具
+    # 实际场景中可以用 LLM 来智能判断
+    if "天气" in query:
+        state["tool_needed"] = True
+    else:
+        state["tool_needed"] = False
+    return state
