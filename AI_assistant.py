@@ -37,3 +37,18 @@ def check_tool_need(state: AssistantState) -> AssistantState:
     else:
         state["tool_needed"] = False
     return state
+
+
+def generate_answer(state: AssistantState) -> AssistantState:
+    """
+    节点3：生成最终回答
+    """
+    query = state["user_query"]
+    if state["tool_needed"]:
+        # 使用工具结果生成回答
+        state["final_answer"] = f"根据查询结果：{state['tool_result']}"
+    else:
+        # 直接回答通用问题
+        response = llm.invoke([HumanMessage(content=query)])
+        state["final_answer"] = response.content
+    return state
