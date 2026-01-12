@@ -52,3 +52,41 @@ def generate_answer(state: AssistantState) -> AssistantState:
         response = llm.invoke([HumanMessage(content=query)])
         state["final_answer"] = response.content
     return state
+
+# 4. 构建 LangGraph 工作流
+def create_assistant_graph():
+    # 创建状态图
+    graph = StateGraph(AssistantState)
+
+    # 添加节点
+    graph.add_node("check_tool_need", check_tool_need)  # 检查是否需要工具
+    graph.add_node("call_weather_tool", call_weather_tool)  # 调用天气工具
+    graph.add_node("generate_answer", generate_answer)  # 生成回答
+
+    # 设置入口点
+    graph.set_entry_point("check_tool_need")
+
+    # 添加条件边：根据是否需要工具决定下一步
+    def tool_branch(state: AssistantState) -> str:
+        if state["tool_needed"]:
+            return "call_weather_tool"
+        else:
+            return "generate_answer"
+
+    graph.add_conditional_edges(
+        "check_tool_need",
+        tool_branch,
+        {
+            "call_weather_tool": "call_weather_tool",
+            "generate_answer": "generate_answer"
+        }
+    )
+
+    # 添加普通边：工具调用完成后生成回答
+    graph.add_edge("call_weather_tool", "generate_answer")
+
+    # 生成回答后结束
+    graph.add_edge("generate_answer", END)
+
+    # 编译图
+    return graph.compile()
