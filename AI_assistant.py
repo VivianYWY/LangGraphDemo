@@ -90,3 +90,32 @@ def create_assistant_graph():
 
     # 编译图
     return graph.compile()
+
+# 5. 运行 demo
+if __name__ == "__main__":
+    # 创建工作流
+    assistant_graph = create_assistant_graph()
+
+    # 测试案例1：需要调用工具的问题
+    print("===== 测试案例1：天气查询 =====")
+    test_state_1 = {
+        "user_query": "上海的天气怎么样？",
+        "tool_needed": False,
+        "tool_result": "",
+        "final_answer": ""
+    }
+    result_1 = assistant_graph.invoke(test_state_1)
+    print(f"用户问题：{result_1['user_query']}")
+    print(f"最终回答：{result_1['final_answer']}\n")
+
+    # 测试案例2：不需要调用工具的问题
+    print("===== 测试案例2：通用问题 =====")
+    test_state_2 = {
+        "user_query": "解释一下什么是人工智能？",
+        "tool_needed": False,
+        "tool_result": "",
+        "final_answer": ""
+    }
+    result_2 = assistant_graph.invoke(test_state_2)
+    print(f"用户问题：{result_2['user_query']}")
+    print(f"最终回答：{result_2['final_answer']}")
