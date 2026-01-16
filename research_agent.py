@@ -21,3 +21,17 @@ Your responsibilities include:
 Present your findings in a well-structured format with clear sections and bullet points where appropriate.
 Your goal is to provide comprehensive, accurate, and useful information that fully addresses the research query.
 """
+
+def create_researcher_agent(model="gpt-4o", temperature=0.7):
+    """Create a researcher agent using the specified LLM."""
+    # Initialize the model
+    llm = ChatOpenAI(model=model, temperature=temperature)
+    def researcher_function(messages):
+        """Function that processes messages and returns a response from the researcher agent."""
+        # Add the system prompt if it's not already there
+        if not messages or not isinstance(messages[0], SystemMessage) or messages[0].content != RESEARCHER_SYSTEM_PROMPT:
+            messages = [SystemMessage(content=RESEARCHER_SYSTEM_PROMPT)] + (messages if isinstance(messages, list) else [])
+        # Get response from the LLM
+        response = llm.invoke(messages)
+        return response
+    return researcher_function
