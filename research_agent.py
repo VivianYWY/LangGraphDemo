@@ -35,3 +35,12 @@ def create_researcher_agent(model="gpt-4o", temperature=0.7):
         response = llm.invoke(messages)
         return response
     return researcher_function
+
+
+# Define the state type for our research workflow
+class ResearchState(TypedDict):
+    """Type definition for our research workflow state."""
+    messages: List[BaseMessage]  # The conversation history
+    query: str  # The research query
+    research: Optional[str]  # The research findings
+    next: Optional[str]  # Where to go next in the graph
