@@ -44,3 +44,23 @@ class ResearchState(TypedDict):
     query: str  # The research query
     research: Optional[str]  # The research findings
     next: Optional[str]  # Where to go next in the graph
+
+def researcher_node(state: ResearchState) -> ResearchState:
+    """A node in our graph that performs research on the query."""
+    # Get the query from the state
+    query = state["query"]
+    # Create a message specifically for the researcher
+    research_message = HumanMessage(content=f"Please research the following topic thoroughly: {query}")
+    # Get the researcher agent
+    researcher = create_researcher_agent()
+    # Get response from the researcher agent
+    response = researcher([research_message])
+    # Update the state with the research findings
+    new_messages = state["messages"] + [research_message, response]
+    # Return the updated state
+    return {
+        **state,
+        "messages": new_messages,
+        "research": response.content,
+        "next": "output"  # In a multi-agent system, this would go to the next agent
+    }
