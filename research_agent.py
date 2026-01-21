@@ -64,3 +64,17 @@ def researcher_node(state: ResearchState) -> ResearchState:
         "research": response.content,
         "next": "output"  # In a multi-agent system, this would go to the next agent
     }
+
+def build_research_graph():
+    """Build a simple research workflow using LangGraph."""
+    # Create a new graph with our state type
+    workflow = StateGraph(ResearchState)
+    # Add nodes
+    workflow.add_node("researcher", researcher_node)
+    workflow.add_node("output", output_node)
+    # Add edges
+    workflow.add_edge("researcher", "output")
+    # Set the entry point
+    workflow.set_entry_point("researcher")
+    # Compile the graph
+    return workflow.compile()
