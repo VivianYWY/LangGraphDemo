@@ -109,3 +109,10 @@ GAPS AND LIMITATIONS:
 - Suggest additional research that might be needed
 Your goal is to provide comprehensive, accurate, and useful information that fully addresses the research query.
 """
+
+class EnhancedResearchState(TypedDict):
+    """Enhanced type definition for our research workflow state."""
+    messages: List[BaseMessage]
+    query: str
+    structured_research: Optional[str]
+    next: Optional[str]
