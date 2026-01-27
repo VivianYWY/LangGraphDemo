@@ -130,3 +130,8 @@ Be constructive in your criticism. Your goal is not to dismiss the researcher's 
 Format your feedback in a clear, organized manner, highlighting specific points that need attention.
 Remember, your ultimate goal is to ensure that the final research output is of the highest quality possible.
 """
+
+class CollaborativeResearchState(TypedDict):
+    """State type for our collaborative research assistant."""
+    messages: List[BaseMessage]  # The conversation history
+    next: Optional[str]  # Where to go next in the graph
