@@ -135,3 +135,19 @@ class CollaborativeResearchState(TypedDict):
     """State type for our collaborative research assistant."""
     messages: List[BaseMessage]  # The conversation history
     next: Optional[str]  # Where to go next in the graph
+
+def build_collaborative_research_assistant():
+    """Build a collaborative research assistant with researcher and critic agents."""
+    # Create a new graph with our state type
+    workflow = StateGraph(CollaborativeResearchState)
+    # Add nodes
+    workflow.add_node("researcher", researcher_node)
+    workflow.add_node("critic", critic_node)
+    workflow.add_node("output", output_node)
+    # Add edges
+    workflow.add_edge("researcher", "critic")
+    workflow.add_edge("critic", "output")
+    # Set the entry point
+    workflow.set_entry_point("researcher")
+    # Compile the graph
+    return workflow.compile()
