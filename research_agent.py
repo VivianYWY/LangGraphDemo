@@ -196,3 +196,12 @@ def build_collaborative_research_assistant():
     workflow.set_entry_point("researcher")
     # Compile the graph
     return workflow.compile()
+
+class CriticEvaluation(BaseModel):
+    """Structured format for critic evaluations."""
+    quality_score: int = Field(description="Overall quality score from 1-10")
+    strengths: List[str] = Field(description="Key strengths of the research")
+    areas_for_improvement: List[str] = Field(description="Areas that need improvement")
+    missing_information: List[str] = Field(description="Important information that was not included")
+    bias_assessment: str = Field(description="Assessment of potential biases in the research")
+    additional_questions: List[str] = Field(description="Questions that should be addressed")
