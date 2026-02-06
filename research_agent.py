@@ -219,3 +219,8 @@ Format your response in a clear, organized manner with appropriate headings, par
 Use simple language to explain complex concepts, and provide examples where helpful.
 Remember, your goal is to create a final response that effectively communicates the information to the user.
 """
+
+class CollaborativeResearchState(TypedDict):
+    """State type for our collaborative research assistant."""
+    messages: List[BaseMessage]  # The conversation history
+    next: Optional[str]  # Where to go next in the graph
