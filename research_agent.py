@@ -224,3 +224,19 @@ class CollaborativeResearchState(TypedDict):
     """State type for our collaborative research assistant."""
     messages: List[BaseMessage]  # The conversation history
     next: Optional[str]  # Where to go next in the graph
+
+def writer_node(state: CollaborativeResearchState) -> CollaborativeResearchState:
+    """Node function for the writer agent."""
+    # Extract messages from the state
+    messages = state["messages"]
+    # Create writer messages with the system prompt
+    writer_messages = [SystemMessage(content=WRITER_SYSTEM_PROMPT)] + messages
+    # Initialize the LLM with a balance of creativity and accuracy
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.6)
+    # Get the writer's response
+    response = llm.invoke(writer_messages)
+    # Return the updated state
+    return {
+        "messages": messages + [response],
+        "next": "output"
+    }
