@@ -240,3 +240,21 @@ def writer_node(state: CollaborativeResearchState) -> CollaborativeResearchState
         "messages": messages + [response],
         "next": "output"
     }
+
+def build_complete_research_assistant():
+    """Build a complete research assistant with researcher, critic, and writer agents."""
+    # Create a new graph with our state type
+    workflow = StateGraph(CollaborativeResearchState)
+    # Add nodes
+    workflow.add_node("researcher", researcher_node)
+    workflow.add_node("critic", critic_node)
+    workflow.add_node("writer", writer_node)
+    workflow.add_node("output", output_node)
+    # Add edges
+    workflow.add_edge("researcher", "critic")
+    workflow.add_edge("critic", "writer")
+    workflow.add_edge("writer", "output")
+    # Set the entry point
+    workflow.set_entry_point("researcher")
+    # Compile the graph
+    return workflow.compile()
