@@ -258,3 +258,9 @@ def build_complete_research_assistant():
     workflow.set_entry_point("researcher")
     # Compile the graph
     return workflow.compile()
+
+class EnhancedResearchState(TypedDict):
+    """Enhanced state type with metadata for the research process."""
+    messages: List[BaseMessage]  # The conversation history
+    metadata: Dict[str, Any]  # Metadata about each step in the process
+    next: Optional[str]  # Where to go next in the graph
