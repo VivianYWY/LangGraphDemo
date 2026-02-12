@@ -264,3 +264,23 @@ class EnhancedResearchState(TypedDict):
     messages: List[BaseMessage]  # The conversation history
     metadata: Dict[str, Any]  # Metadata about each step in the process
     next: Optional[str]  # Where to go next in the graph
+
+def coordinator_node(state: ResearchState) -> ResearchState:
+    """Coordinator node that decides the workflow path."""
+    # Extract messages from the state
+    messages = state["messages"]
+    # Create coordinator messages with the system prompt
+    coordinator_messages = [SystemMessage(content=COORDINATOR_SYSTEM_PROMPT)] + messages
+    # Initialize the LLM with a lower temperature for consistent decision-making
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.2)
+    # Get the coordinator's response
+    response = llm.invoke(coordinator_messages)
+    # Parse the JSON response to determine next steps
+    try:
+        decision = json.loads(response.content)
+        next_step = decision.get("next", "researcher")  # Default to researcher if not specified
+    except Exception:
+        # If there's an error parsing the JSON, default to the researcher
+        next_step = "researcher"
+    # Return the updated state
+    return {"messages": messages, "next": next_step}
