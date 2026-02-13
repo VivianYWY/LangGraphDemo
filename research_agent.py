@@ -284,3 +284,13 @@ def coordinator_node(state: ResearchState) -> ResearchState:
         next_step = "researcher"
     # Return the updated state
     return {"messages": messages, "next": next_step}
+
+# Add conditional edges from the coordinator
+workflow.add_conditional_edges(
+    "coordinator",
+    lambda state: state["next"],
+    {
+        "researcher": "researcher",
+        "done": "output"
+    }
+)
