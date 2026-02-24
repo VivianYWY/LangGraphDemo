@@ -294,3 +294,36 @@ workflow.add_conditional_edges(
         "done": "output"
     }
 )
+def build_dynamic_research_assistant():
+    """Build a dynamic research assistant with a coordinator agent managing the workflow."""
+    # Create a new graph
+    workflow = Graph()
+
+    # Add nodes
+    workflow.add_node("coordinator", coordinator_agent)
+    workflow.add_node("researcher", researcher_agent)
+    workflow.add_node("critic", critic_agent)
+    workflow.add_node("writer", writer_agent)
+    workflow.add_node("output", output)
+
+    # Add conditional edges from the coordinator
+    workflow.add_conditional_edges(
+        "coordinator",
+        lambda state: state["next"],
+        {
+            "researcher": "researcher",
+            "done": "output"
+        }
+    )
+
+    # Add the rest of the edges
+    workflow.add_edge("researcher", "critic")
+    workflow.add_edge("critic", "writer")
+    workflow.add_edge("writer", "coordinator")
+    workflow.add_edge("output", END)
+
+    # Set the entry point
+    workflow.set_entry_point("coordinator")
+
+    # Compile the graph
+    return workflow.compile()
