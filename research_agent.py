@@ -327,3 +327,7 @@ def build_dynamic_research_assistant():
 
     # Compile the graph
     return workflow.compile()
+{
+  "reasoning": "This is a simple factual question asking for the capital of France. The answer is well-known and doesn't require in-depth research, critical analysis, or specialized writing.",
+  "next": "done"
+}
