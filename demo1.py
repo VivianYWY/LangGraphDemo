@@ -19,3 +19,11 @@ workflow.add_node("agent", agent_node)
 workflow.set_entry_point("agent")
 workflow.add_edge("agent", END)
 graph = workflow.compile()
+
+# FastAPI 应用
+app = FastAPI()
+
+@app.post("/chat")
+async def chat(question: str):
+    result = await graph.ainvoke({"question": question})
+    return result
