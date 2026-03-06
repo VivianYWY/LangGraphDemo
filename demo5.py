@@ -14,3 +14,23 @@ def random_poem(title: str) -> str:
 
 class PromptTitleInput(BaseModel):
     title: str = Field(description="这是诗的主题")
+
+import os
+from pydantic import BaseModel, Field
+
+def save_text(content: str, path: str) -> str:
+    """
+    保存文本的函数
+
+    :param content: 要保存的内容
+    :param path: 保存目录
+    :return: 提示字符串
+    """
+    with open(os.path.join(path, "test.txt"), "w") as file:
+        file.write(content)
+    return "保存成功，在{0} 下".format(os.path.join(path, "test.txt"))
+
+
+class PromptSaveInput(BaseModel):
+    content: str = Field(description="需要保存的内容")
+    path: str = Field(description="保存内容的目录")
