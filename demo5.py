@@ -56,3 +56,13 @@ def post_message(title: str, content: str, address: str) -> str:
     message['From'] = "{}".format(sender)
     message['To'] = ",".join(receivers)
     message['Subject'] = title
+
+    try:
+        smtp_obj = smtplib.SMTP_SSL(mail_host, 465)  # 启用SSL发信, 端口一般是465
+        smtp_obj.login(mail_user, mail_pass)  # 登录验证
+        smtp_obj.sendmail(sender, receivers, message.as_string())  # 发送
+        smtp_obj.quit()
+        print("邮件发送成功。")
+        return "邮件发送成功。"
+    except smtplib.SMTPException as e:
+        return f"邮件发送失败: {str(e)}"
