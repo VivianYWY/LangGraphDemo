@@ -66,3 +66,9 @@ def post_message(title: str, content: str, address: str) -> str:
         return "邮件发送成功。"
     except smtplib.SMTPException as e:
         return f"邮件发送失败: {str(e)}"
+
+# 定义输入模型类
+class PostInput(BaseModel):
+    title: str = Field(description="这是邮件的主题")
+    content: str = Field(description="这是邮件的内容")
+    address: str = Field(description="这是邮箱地址")
