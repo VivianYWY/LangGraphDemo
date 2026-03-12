@@ -72,3 +72,24 @@ class PostInput(BaseModel):
     title: str = Field(description="这是邮件的主题")
     content: str = Field(description="这是邮件的内容")
     address: str = Field(description="这是邮箱地址")
+
+tools = [
+    StructuredTool.from_function(
+        func=random_poem,
+        name="写诗",
+        description="根据用户输入的主题",
+        args_schema=PromptTitleInput
+    ),
+    StructuredTool.from_function(
+        func=save_text,
+        name="保存文本",
+        description="将内容保存到用户指定的目录下",
+        args_schema=PromptSaveInput
+    ),
+    StructuredTool.from_function(
+        func=post_message,
+        name="发送邮件",
+        description="根据用户输入的主题和内容发送邮件",
+        args_schema=PostInput
+    )
+]
