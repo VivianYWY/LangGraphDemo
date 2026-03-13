@@ -30,7 +30,7 @@ def save_text(content: str, path: str) -> str:
         file.write(content)
     return "保存成功，在{0} 下".format(os.path.join(path, "test.txt"))
 
-
+result = agent.run("给1780105****@163.com写个请假邮件，我肚子疼要去医院")
 class PromptSaveInput(BaseModel):
     content: str = Field(description="需要保存的内容")
     path: str = Field(description="保存内容的目录")
