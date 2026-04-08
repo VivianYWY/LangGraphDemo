@@ -19,3 +19,13 @@ def node_b(state: WorkflowState) -> dict:
 workflow = StateGraph(WorkflowState)
 workflow.add_node("node_a", node_a)
 workflow.add_node("node_b", node_b)
+
+# 建立连接
+workflow.add_edge(START, "node_a")
+workflow.add_edge("node_a", "node_b")
+workflow.add_edge("node_b", "END")
+
+# 编译并执行
+app = workflow.compile()
+result = app.invoke({"input": "hello world"})
+print(result)
