@@ -29,3 +29,25 @@ workflow.add_edge("node_b", "END")
 app = workflow.compile()
 result = app.invoke({"input": "hello world"})
 print(result)
+
+from typing import TypedDict
+from langgraph.graph import StateGraph, END
+
+# 定义工作流状态
+class AgentState(TypedDict):
+    input: str
+    is_too_short: bool
+
+# 定义节点函数
+def entry_node(state: AgentState) -> dict:
+    if len(state['input']) < 10:
+        return {"is_too_short": True}
+    return {"is_too_short": False}
+
+def fix_node(state: AgentState) -> dict:
+    new_input = state['input'] + "（已修正）"
+    return {"input": new_input, "is_too_short": False}
+
+# 定义条件分支逻辑
+def should_continue(state: AgentState):
+    return "fix_node" if state["is_too_short"] else END
