@@ -51,3 +51,20 @@ def fix_node(state: AgentState) -> dict:
 # 定义条件分支逻辑
 def should_continue(state: AgentState):
     return "fix_node" if state["is_too_short"] else END
+
+# 构建工作流
+workflow = StateGraph(AgentState)
+workflow.add_node("entry_node", entry_node)
+workflow.add_node("fix_node", fix_node)
+
+# 建立连接
+workflow.set_entry_point("entry_node")
+workflow.add_edge("fix_node", "entry_node")  # 形成循环
+workflow.add_conditional_edges(
+    "entry_node",
+    should_continue,
+    {"fix_node": "fix_node", END: END}
+)
+
+# 编译工作流
+app = workflow.compile()
