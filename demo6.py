@@ -68,3 +68,12 @@ workflow.add_conditional_edges(
 
 # 编译工作流
 app = workflow.compile()
+
+from typing import TypedDict, List, Optional
+
+# 定义工作流状态结构
+class ReportGenerationState(TypedDict):
+    query: str
+    docs: Optional[List[str]]
+    draft: Optional[str]
+    report: Optional[str]
