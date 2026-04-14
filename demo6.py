@@ -77,3 +77,20 @@ class ReportGenerationState(TypedDict):
     docs: Optional[List[str]]
     draft: Optional[str]
     report: Optional[str]
+
+# 定义节点函数
+def retrieval_node(state: ReportGenerationState) -> dict:
+    query = state.get("query")
+    if not query:
+        raise ValueError("输入状态中缺少'query'字段")
+    
+    # 模拟检索过程
+    retrieved_docs = [f"关于'{query}'的文档1", f"关于'{query}'的文档2"]
+    
+    # 返回状态更新
+    return {"docs": retrieved_docs}
+
+# 模拟状态演进
+initial_state = {"query": "分析销售额"}
+update_dict = retrieval_node(initial_state)
+final_state = {**initial_state, **update_dict}
