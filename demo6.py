@@ -94,3 +94,16 @@ def retrieval_node(state: ReportGenerationState) -> dict:
 initial_state = {"query": "分析销售额"}
 update_dict = retrieval_node(initial_state)
 final_state = {**initial_state, **update_dict}
+
+import asyncio
+
+async def async_tool_call(source: str, query: str) -> str:
+    await asyncio.sleep(1)
+    return f"来自 {source} 的关于 '{query}' 的结果"
+
+async def parallel_retrieval_node(state: dict) -> dict:
+    query = state.get("query")
+    sources = ["数据库", "API", "知识库"]
+    tasks = [async_tool_call(source, query) for source in sources]
+    results = await asyncio.gather(*tasks)
+    return {"docs": results}
