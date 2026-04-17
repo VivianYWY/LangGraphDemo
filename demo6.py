@@ -107,3 +107,13 @@ async def parallel_retrieval_node(state: dict) -> dict:
     tasks = [async_tool_call(source, query) for source in sources]
     results = await asyncio.gather(*tasks)
     return {"docs": results}
+
+
+def primary_api_call(query: str) -> str:
+    import random
+    if random.random() < 0.5:
+        raise ConnectionError("主API连接失败")
+    return f"来自主API的成功结果：{query}"
+
+def fallback_api_call(query: str) -> str:
+    return f"来自备用API的回退结果：{query}"
