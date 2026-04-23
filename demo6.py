@@ -117,3 +117,11 @@ def primary_api_call(query: str) -> str:
 
 def fallback_api_call(query: str) -> str:
     return f"来自备用API的回退结果：{query}"
+
+def node_with_fallback(state: dict) -> dict:
+    query = state.get("query")
+    try:
+        result = primary_api_call(query)
+    except ConnectionError:
+        result = fallback_api_call(query)
+    return {"result": result}
